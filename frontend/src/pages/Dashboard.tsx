@@ -1,6 +1,68 @@
 import React from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
 
 function Dashboard() {
+  // Sample data for charts
+  const appointmentData = [
+    { day: 'Mon', appointments: 12 },
+    { day: 'Tue', appointments: 15 },
+    { day: 'Wed', appointments: 10 },
+    { day: 'Thu', appointments: 18 },
+    { day: 'Fri', appointments: 14 },
+    { day: 'Sat', appointments: 8 },
+    { day: 'Sun', appointments: 5 },
+  ];
+
+  const revenueData = [
+    { month: 'Jan', revenue: 4000 },
+    { month: 'Feb', revenue: 3000 },
+    { month: 'Mar', revenue: 5000 },
+    { month: 'Apr', revenue: 4500 },
+    { month: 'May', revenue: 6000 },
+    { month: 'Jun', revenue: 5500 },
+  ];
+
+  const patientAgeData = [
+    { name: '0-18', value: 15 },
+    { name: '19-35', value: 40 },
+    { name: '36-50', value: 30 },
+    { name: '51+', value: 15 },
+  ];
+
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+  // Sample patient data for diseases, medications, and treatments
+  const patientData = [
+    {
+      id: 1,
+      name: 'John Doe',
+      disease: 'Hypertension',
+      medication: 'Lisinopril',
+      treatment: 'Medication and Lifestyle Changes',
+    },
+    {
+      id: 2,
+      name: 'Jane Smith',
+      disease: 'Diabetes',
+      medication: 'Metformin',
+      treatment: 'Insulin Therapy and Diet',
+    },
+    {
+      id: 3,
+      name: 'Mike Johnson',
+      disease: 'Asthma',
+      medication: 'Albuterol',
+      treatment: 'Inhaler and Steroids',
+    },
+    {
+      id: 4,
+      name: 'Sarah Wilson',
+      disease: 'Arthritis',
+      medication: 'Ibuprofen',
+      treatment: 'Physical Therapy',
+    },
+  ];
+
   return (
     <div className="p-8">
       <header className="mb-8">
@@ -68,6 +130,107 @@ function Dashboard() {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+
+      {/* Additional Graphs and Insights */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+        {/* Appointments per Day */}
+        <div className="bg-white p-6 rounded-xl shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">Appointments This Week</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={appointmentData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="day" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="appointments" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Revenue Over Time */}
+        <div className="bg-white p-6 rounded-xl shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">Revenue Over Time</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={revenueData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="revenue" stroke="#82ca9d" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Patient Age Distribution */}
+      <div className="bg-white p-6 rounded-xl shadow-sm mt-8">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">Patient Age Distribution</h3>
+        <ResponsiveContainer width="100%" height={300}>
+          <PieChart>
+            <Pie
+              data={patientAgeData}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              outerRadius={80}
+              fill="#8884d8"
+              dataKey="value"
+              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+            >
+              {patientAgeData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Patient Data: Diseases, Medications, and Treatments */}
+      <div className="bg-white p-6 rounded-xl shadow-sm mt-8">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">Patient Data</h3>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Patient Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Disease
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Medication
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Treatment
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {patientData.map((patient) => (
+                <tr key={patient.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="font-medium text-gray-900">{patient.name}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                    {patient.disease}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                    {patient.medication}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                    {patient.treatment}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

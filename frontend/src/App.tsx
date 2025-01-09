@@ -29,9 +29,10 @@ function App() {
           <Route path="notifications" element={<Notifications />} />
           <Route path="messages" element={<Messages />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="/patient-dashboard" element={<PatientDashboard />} />
+          <Route path="/Dashboard" element={<Dashboard />} />
         </Route>
-        <Route path="/patient-dashboard" element={<PatientDashboard />} />
-        <Route path="/medical-dashboard" element={<Dashboard />} />
+        
       </Routes>
     </Router>
   );

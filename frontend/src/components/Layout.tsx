@@ -9,12 +9,15 @@ import {
   CreditCard,
   Activity,
   MessageSquare,
-  Settings
+  Settings,
+  LayoutDashboard
 } from 'lucide-react';
+import Dashboard from '../pages/Dashboard';
 
 const navItems = [
   { icon: Calendar, text: 'Appointments', path: '/appointments' },
   { icon: Users, text: 'Patients', path: '/patients' },
+  { icon: LayoutDashboard,text: 'DashBoard',path:'/Dashboard'},
   { icon: VideoIcon, text: 'Telemedicine', path: '/telemedicine' },
   { icon: FileText, text: 'Prescriptions', path: '/prescriptions' },
   { icon: CreditCard, text: 'Billing', path: '/billing' },
