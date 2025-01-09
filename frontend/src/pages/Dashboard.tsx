@@ -169,14 +169,14 @@ function Dashboard() {
       {/* Patient Age Distribution */}
       <div className="bg-white p-6 rounded-xl shadow-sm mt-8">
         <h3 className="text-lg font-semibold text-gray-800 mb-4">Patient Age Distribution</h3>
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={500}>
           <PieChart>
             <Pie
               data={patientAgeData}
               cx="50%"
               cy="50%"
               labelLine={false}
-              outerRadius={80}
+              outerRadius={200}
               fill="#8884d8"
               dataKey="value"
               label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}

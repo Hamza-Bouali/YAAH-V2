@@ -10,9 +10,10 @@ import {
   Activity,
   MessageSquare,
   Settings,
-  LayoutDashboard
+  
+  LayoutDashboard,
+  Monitor
 } from 'lucide-react';
-import Dashboard from '../pages/Dashboard';
 
 const navItems = [
   { icon: Calendar, text: 'Appointments', path: '/appointments' },
@@ -20,10 +21,12 @@ const navItems = [
   { icon: LayoutDashboard,text: 'DashBoard',path:'/Dashboard'},
   { icon: VideoIcon, text: 'Telemedicine', path: '/telemedicine' },
   { icon: FileText, text: 'Prescriptions', path: '/prescriptions' },
+  {icon: Monitor,text: 'Accountant', path: '/accountant'},
   { icon: CreditCard, text: 'Billing', path: '/billing' },
   { icon: Bell, text: 'Notifications', path: '/notifications' },
   { icon: MessageSquare, text: 'Messages', path: '/messages' },
-  { icon: Settings, text: 'Settings', path: '/settings' }
+  { icon: Settings, text: 'Settings', path: '/settings' },
+  
 ];
 
 function Layout() {
