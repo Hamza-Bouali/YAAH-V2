@@ -27,6 +27,8 @@ function App() {
           <Route path="messages" element={<Messages />} />
           <Route path="settings" element={<Settings />} />
           <Route path="accountant" element={<AccountantPage />} /> {/* Add the AccountantPage route */}
+          <Route path="dashboard" element={<Dashboard/>} />
+
         </Route>
       </Routes>
     </Router>
