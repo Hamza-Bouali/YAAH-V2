@@ -36,7 +36,7 @@ function Layout() {
           onClick={() => navigate('/')}
         >
           <Activity className="h-8 w-8 text-blue-600" />
-          <span className="ml-2 text-xl font-semibold text-gray-800">MedOffice</span>
+          <span className="ml-2 text-xl font-semibold text-gray-800">YAAH</span>
         </div>
         <nav className="p-4">
           {navItems.map((item, index) => (

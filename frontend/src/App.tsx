@@ -10,11 +10,15 @@ import Billing from './pages/Billing';
 import Notifications from './pages/Notifications';
 import Messages from './pages/Messages';
 import Settings from './pages/Settings';
+import Login from './pages/Login';
+import PatientDashboard from './pages/PatientDashboard'; // Import the PatientDashboard component
+; // Import the MedicalDashboard component
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/login" element={<Login />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path="appointments" element={<Appointments />} />
@@ -26,6 +30,8 @@ function App() {
           <Route path="messages" element={<Messages />} />
           <Route path="settings" element={<Settings />} />
         </Route>
+        <Route path="/patient-dashboard" element={<PatientDashboard />} />
+        <Route path="/medical-dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   );
