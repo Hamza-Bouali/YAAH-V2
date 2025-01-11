@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { format, addDays, startOfWeek } from 'date-fns';
 import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import AppointmentModal from '../components/AppointmentModal';

@@ -15,24 +15,28 @@ import AccountantPage from './pages/AccountantPage'; // Import the AccountantPag
 import Login from './pages/Login'; // Import the Login page
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+
+ 
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="appointments" element={<Appointments />} />
-          <Route path="patients" element={<Patients />} />
-          <Route path="telemedicine" element={<Telemedicine />} />
-          <Route path="prescriptions" element={<Prescriptions />} />
-          <Route path="billing" element={<Billing />} />
-          <Route path="notifications" element={<Notifications />} />
-          <Route path="messages" element={<Messages />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="*" element={<h1>Not Found</h1>} />
-        </Route>
-        <Route path="accountant" element={<ProtectedRoute component={AccountantPage} isAuthenticated={true} />} />
-        <Route path="login" element={<Login />} />
+      <Route path="/" element={<Layout />}>
+        <Route index element={<ProtectedRoute component={Dashboard} isAuthenticated={isAuthenticated} />} />
+        <Route path="appointments" element={<ProtectedRoute component={Appointments} isAuthenticated={isAuthenticated} />} />
+        <Route path="patients" element={<ProtectedRoute component={Patients} isAuthenticated={isAuthenticated} />} />
+        <Route path="telemedicine" element={<ProtectedRoute component={Telemedicine} isAuthenticated={isAuthenticated} />} />
+        <Route path="prescriptions" element={<ProtectedRoute component={Prescriptions} isAuthenticated={isAuthenticated} />} />
+        <Route path="billing" element={<ProtectedRoute component={Billing} isAuthenticated={isAuthenticated} />} />
+        <Route path="notifications" element={<ProtectedRoute component={Notifications} isAuthenticated={isAuthenticated} />} />
+        <Route path="messages" element={<ProtectedRoute component={Messages} isAuthenticated={isAuthenticated} />} />
+        <Route path="settings" element={<ProtectedRoute component={Settings} isAuthenticated={isAuthenticated} />} />
+        <Route path="dashboard" element={<ProtectedRoute component={Dashboard} isAuthenticated={isAuthenticated} />} />
+        <Route path="*" element={<h1>Not Found</h1>} />
+      </Route>
+      <Route path="accountant" element={<ProtectedRoute component={AccountantPage} isAuthenticated={isAuthenticated} />} />
+      <Route path="login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
       </Routes>
     </Router>
   );

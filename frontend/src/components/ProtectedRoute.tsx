@@ -1,6 +1,5 @@
 import React from 'react';
-import { Route, Navigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 interface ProtectedRouteProps {
     component: React.ComponentType<any>;
@@ -9,18 +8,12 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ component: Component, isAuthenticated, ...rest }) => {
-    return (
-        <Route
-            {...rest}
-            element={
-                isAuthenticated ? (
-                    <Component />
-                ) : (
-                    <Navigate to="/login" />
-                )
-            }
-        />
-    );
+
+  return isAuthenticated ? <Component {...rest} /> : <Navigate to="/login" />;
+
 };
+
+
+
 
 export default ProtectedRoute;

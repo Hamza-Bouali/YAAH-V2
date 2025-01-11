@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function Login() {
+interface LoginProps {
+  setIsAuthenticated: (value: boolean) => void;
+}
+
+
+function Login({ setIsAuthenticated }: LoginProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('doctor'); // Default role
@@ -22,6 +27,7 @@ function Login() {
     } else if (role === 'medical') {
       navigate('/medical-dashboard');
     }
+    setIsAuthenticated(true);
   };
 
   return (
