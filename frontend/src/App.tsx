@@ -10,7 +10,9 @@ import Billing from './pages/Billing';
 import Notifications from './pages/Notifications';
 import Messages from './pages/Messages';
 import Settings from './pages/Settings';
+import ProtectedRoute from './components/ProtectedRoute.tsx'; // Import the ProtectedRoute component
 import AccountantPage from './pages/AccountantPage'; // Import the AccountantPage
+import Login from './pages/Login'; // Import the Login page
 
 function App() {
   return (
@@ -26,10 +28,11 @@ function App() {
           <Route path="notifications" element={<Notifications />} />
           <Route path="messages" element={<Messages />} />
           <Route path="settings" element={<Settings />} />
-          <Route path="accountant" element={<AccountantPage />} /> {/* Add the AccountantPage route */}
-          <Route path="dashboard" element={<Dashboard/>} />
-
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="*" element={<h1>Not Found</h1>} />
         </Route>
+        <Route path="accountant" element={<ProtectedRoute component={AccountantPage} isAuthenticated={true} />} />
+        <Route path="login" element={<Login />} />
       </Routes>
     </Router>
   );
