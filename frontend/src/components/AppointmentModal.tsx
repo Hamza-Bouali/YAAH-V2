@@ -34,9 +34,9 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
       return;
     }
 
-    // Convert 24h time to 12h format
+    // Convert time to the same format as timeSlots
     const timeDate = new Date(`2000-01-01T${time}`);
-    const formattedTime = format(timeDate, 'h:mm a');
+    const formattedTime = format(timeDate, 'h:mm a').toUpperCase();
 
     addAppointment({
       patient: selectedClient,

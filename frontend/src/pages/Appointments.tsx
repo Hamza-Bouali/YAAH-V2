@@ -26,14 +26,14 @@ const mockAppointments = [
     patient: 'John Doe',
     time: '09:00 AM',
     type: 'Check-up',
-    date: "2025-01-11", // Tomorrow's date
+    date: '2025-01-11', // Tomorrow's date
   },
   {
     id: 2,
     patient: 'Jane Smith',
-    time: '10:30 AM',
+    time: '10:00 AM',
     type: 'Follow-up',
-    date: "2025-01-11", // Day after tomorrow
+    date: '2025-01-11', // Same as above
   },
 ];
 
@@ -49,7 +49,7 @@ function Appointments() {
 
   const timeSlots = Array.from({ length: 9 }, (_, i) => {
     const hour = i + 9; // Start from 9 AM
-    return format(new Date().setHours(hour, 0), 'h:mm a');
+    return format(new Date().setHours(hour, 0), 'hh:mm a');
   });
 
   // Function to add a new appointment
@@ -69,9 +69,9 @@ function Appointments() {
 
   // Function to delete an appointment
   const deleteAppointment = (id: number) => {
-    confirm("you want to delete this Appointement ?") && setAppointments(appointments.filter((apt) => apt.id !== id));
+    confirm('Do you want to delete this appointment?') &&
+      setAppointments(appointments.filter((apt) => apt.id !== id));
   };
-
 
   // Function to handle client selection
   const handleSelectClient = (clientName: string) => {
@@ -157,8 +157,9 @@ function Appointments() {
               {timeSlots.map((time) => {
                 const appointment = appointments.find(
                   (apt) =>
-                    apt.date == format(day, 'yyyy-MM-dd') && apt.time === time
+                    apt.date === format(day, 'yyyy-MM-dd') && apt.time === time
                 );
+                console.log('Day:', format(day, 'yyyy-MM-dd'), 'Time:', time, 'Appointment:', appointment);
                 return (
                   <div key={time} className="h-20 border-b relative">
                     {appointment && (
