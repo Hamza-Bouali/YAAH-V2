@@ -18,6 +18,7 @@ interface Appointment {
   time: string;
   type: string;
   date: string;
+  place: string;
 }
 
 // Mock initial appointments data
@@ -28,6 +29,7 @@ const mockAppointments = [
     time: '09:00 AM',
     type: 'Check-up',
     date: '2025-01-11', // Tomorrow's date
+    place: 'In-person',
   },
   {
     id: 2,
@@ -35,6 +37,7 @@ const mockAppointments = [
     time: '10:00 AM',
     type: 'Follow-up',
     date: '2025-01-11', // Same as above
+    place: 'Virtual',
   },
 ];
 
@@ -64,6 +67,7 @@ function Appointments() {
     date: string;
     time: string;
     type: string;
+    place: string;
   }) => {
     const appointment = {
       id: appointments.length + 1,
@@ -163,7 +167,7 @@ function Appointments() {
                     >
                     {appointment ? (
                       <div
-                      className={`absolute inset-1 ${appointment.type==='Emergency'? 'bg-red-200 text-red-700': appointment.type==='Follow-up' ? 'bg-green-200 text-green-700':appointment.type === 'Check-up' ? 'bg-amber-200 text-amber-700':''} rounded p-2 text-sm cursor-pointer hover:bg-blue-100`}
+                      className={`absolute inset-1 ${appointment.type==='Emergency'? 'bg-red-200 text-red-700': appointment.type==='Follow-up' ? 'bg-green-200 text-green-700':appointment.type === 'Check-up' ? 'bg-amber-200 text-amber-700':'bg-stone-200 text-stone-700'} rounded p-2 text-sm cursor-pointer hover:bg-blue-100`}
                       onClick={(e) => {
                         e.stopPropagation();
                         deleteAppointment(appointment.id);

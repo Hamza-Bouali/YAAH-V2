@@ -1,17 +1,14 @@
 import React from 'react';
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
 
-const ClientModal = ({
-  open,
-  setOpen,
-  clients,
-  onSelectClient,
-}: {
+interface ClientModalProps {
   open: boolean;
   setOpen: (arg0: boolean) => void;
   clients: { id: number; name: string }[];
   onSelectClient: (clientName: string) => void;
-}) => {
+}
+
+const ClientModal: React.FC<ClientModalProps> = ({ open, setOpen, clients, onSelectClient }) => {
   return (
     <Dialog open={open} onClose={() => setOpen(false)} className="relative z-20">
       <DialogBackdrop
@@ -32,7 +29,6 @@ const ClientModal = ({
                     Select a Client
                   </DialogTitle>
                   <div className="mt-4 space-y-3">
-                    {/* List of Clients */}
                     {clients.map((client) => (
                       <div
                         key={client.id}
@@ -43,10 +39,9 @@ const ClientModal = ({
                       </div>
                     ))}
 
-                    {/* Option to Create a New Client */}
                     <div className="mt-4">
                       <a
-                        href="#" // Placeholder link for creating a new client
+                        href="#"
                         onClick={(e) => {
                           e.preventDefault();
                           alert('Create new client functionality goes here.');
