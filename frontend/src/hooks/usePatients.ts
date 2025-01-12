@@ -5,7 +5,13 @@ import PatientDataPage from '../pages/PatientData'; // Adjust the import path as
 
 interface PatientData {
     id: string;
-    prescription: string;
+    prescription: {
+        medication: string;
+        dosage: string;
+        frequency : string;
+        status: string;
+        duration: string;
+    };
     name: string;
     age: number;
     email: string;
