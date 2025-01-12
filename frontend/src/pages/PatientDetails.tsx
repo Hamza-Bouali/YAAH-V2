@@ -285,7 +285,7 @@ function PatientDetails() {
                   <input
                     type="text"
                     value={newMedication}
-                    onChange={(e) => setNewMedication(e.target.value)}
+                    onChange={(e) => setPatient(prev => ({ ...prev, medications: [...prev.medications, e.target.value] }))}
                     placeholder="Add new medication"
                     className="flex-1 px-3 py-2 border rounded"
                   />

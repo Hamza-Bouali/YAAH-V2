@@ -5,6 +5,7 @@ import PatientDataPage from '../pages/PatientData'; // Adjust the import path as
 
 interface PatientData {
     id: string;
+    prescription: string;
     name: string;
     age: number;
     email: string;
@@ -36,6 +37,7 @@ export const usePatients = () => {
           {
             id: '1',
             name: 'John Doe',
+            prescription: 'None',
             age: 30,
             treatment: 'None',
             email: 'john.doe@example.com',
@@ -62,6 +64,7 @@ export const usePatients = () => {
             treatment: 'None',
             name: 'Jane Smith',
             diseases: ['None'],
+            prescription: 'None',
             age: 25,
             email: 'jane.smith@example.com',
             phone: '(555) 987-6543',
