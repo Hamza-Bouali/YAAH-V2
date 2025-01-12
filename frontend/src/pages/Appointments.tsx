@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { format, addDays, startOfWeek } from 'date-fns';
-import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus,Siren } from 'lucide-react';
 import AppointmentModal from '../components/AppointmentModal';
 import ClientModal from '../components/ClientModal';
+import { se } from 'date-fns/locale';
 
 // Mock clients data
 const mockClients = [
@@ -43,6 +44,7 @@ function Appointments() {
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
   const [isClientModalOpen, setIsClientModalOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState('');
+  const [selectedDateTime, setSelectedDateTime] = useState<{ date: string; time: string } | null>(null);
 
   const startOfCurrentWeek = startOfWeek(currentDate);
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(startOfCurrentWeek, i));
@@ -52,7 +54,11 @@ function Appointments() {
     return format(new Date().setHours(hour, 0), 'hh:mm a');
   });
 
-  // Function to add a new appointment
+  const handleSessionClick = (date: string, time: string) => {
+    setSelectedDateTime({ date, time });
+    setIsAppointmentModalOpen(true);
+  };
+
   const addAppointment = (newAppointment: {
     patient: string;
     date: string;
@@ -60,47 +66,40 @@ function Appointments() {
     type: string;
   }) => {
     const appointment = {
-      id: appointments.length + 1, // Generate a unique ID
+      id: appointments.length + 1,
       ...newAppointment,
     };
     setAppointments([...appointments, appointment]);
-    console.log('New Appointment:', newAppointment);
   };
 
-  // Function to delete an appointment
   const deleteAppointment = (id: number) => {
-    confirm('Do you want to delete this appointment?') &&
+    if (confirm('Do you want to delete this appointment?')) {
       setAppointments(appointments.filter((apt) => apt.id !== id));
+    }
   };
 
-  // Function to handle client selection
-  const handleSelectClient = (clientName: string) => {
-    setSelectedClient(clientName);
-    setIsClientModalOpen(false); // Close the client modal
-  };
-
-  useEffect(() => {
-    console.log('Appointments:', appointments);
-  }, [appointments]);
 
   return (
     <div className="p-8">
-      {/* Modal for adding appointments */}
       <AppointmentModal
         open={isAppointmentModalOpen}
         setOpen={setIsAppointmentModalOpen}
         addAppointment={addAppointment}
+        appointement={null}
         selectedClient={selectedClient}
         setSelectedClient={setSelectedClient}
         openClientModal={() => setIsClientModalOpen(true)}
+        selectedDateTime={selectedDateTime}
       />
 
-      {/* Modal for selecting clients */}
       <ClientModal
         open={isClientModalOpen}
         setOpen={setIsClientModalOpen}
         clients={mockClients}
-        onSelectClient={handleSelectClient}
+        onSelectClient={(clientName) => {
+          setSelectedClient(clientName);
+          setIsClientModalOpen(false);
+        }}
       />
 
       <div className="flex justify-between items-center mb-6">
@@ -115,7 +114,6 @@ function Appointments() {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm">
-        {/* Calendar Navigation */}
         <div className="flex items-center justify-between p-4 border-b">
           <button
             onClick={() => setCurrentDate(addDays(currentDate, -7))}
@@ -135,9 +133,7 @@ function Appointments() {
           </button>
         </div>
 
-        {/* Calendar Grid */}
         <div className="grid grid-cols-8 border-b">
-          {/* Time column */}
           <div className="border-r">
             <div className="h-12 border-b"></div>
             {timeSlots.map((time) => (
@@ -147,7 +143,6 @@ function Appointments() {
             ))}
           </div>
 
-          {/* Days columns */}
           {weekDays.map((day) => (
             <div key={format(day, 'yyyy-MM-dd')} className="border-r last:border-r-0">
               <div className="h-12 border-b p-2 text-center">
@@ -155,23 +150,33 @@ function Appointments() {
                 <div className="text-sm text-gray-500">{format(day, 'd')}</div>
               </div>
               {timeSlots.map((time) => {
+                const date = format(day, 'yyyy-MM-dd');
                 const appointment = appointments.find(
-                  (apt) =>
-                    apt.date === format(day, 'yyyy-MM-dd') && apt.time === time
+                  (apt) => apt.date === date && apt.time === time
                 );
-                console.log('Day:', format(day, 'yyyy-MM-dd'), 'Time:', time, 'Appointment:', appointment);
+
                 return (
-                  <div key={time} className="h-20 border-b relative">
-                    {appointment && (
+                    <div
+                    key={time}
+                    className="h-20 border-b relative cursor-pointer"
+                    onClick={() => handleSessionClick(date, time)}
+                    >
+                    {appointment ? (
                       <div
-                        className="absolute inset-1 bg-blue-50 text-blue-700 rounded p-2 text-sm cursor-pointer hover:bg-blue-100"
-                        onClick={() => deleteAppointment(appointment.id)}
+                      className={`absolute inset-1 ${appointment.type==='Emergency'? 'bg-red-200 text-red-700': appointment.type==='Follow-up' ? 'bg-green-200 text-green-700':appointment.type === 'Check-up' ? 'bg-amber-200 text-amber-700':''} rounded p-2 text-sm cursor-pointer hover:bg-blue-100`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteAppointment(appointment.id);
+                      }}
                       >
-                        <div className="font-medium">{appointment.patient}</div>
-                        <div className="text-xs">{appointment.type}</div>
+                      <Siren className="w-4 h-4 mr-2" />
+                      <div className="font-medium">{appointment.patient}</div>
+                      <div className="text-xs">{appointment.type}</div>
                       </div>
+                    ) : (
+                      <div className="absolute inset-1 hover:bg-blue-100 rounded" onClick={() => setSelectedDateTime({ date, time })}></div>
                     )}
-                  </div>
+                    </div>
                 );
               })}
             </div>
@@ -181,5 +186,7 @@ function Appointments() {
     </div>
   );
 }
+
+
 
 export default Appointments;

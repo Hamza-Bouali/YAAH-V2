@@ -1,19 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
 import { format } from 'date-fns';
 
+interface AppointmentProps{
+  patient: string;
+  date: string;
+  time: string;
+  type: string;
+}
+
+
 interface AppointmentModalProps {
+
   open: boolean;
-  setOpen: (open: boolean) => void;
-  addAppointment: (appointment: {
+
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  appointement: AppointmentProps | null;
+
+  addAppointment: (newAppointment: {
+
     patient: string;
+
     date: string;
+
     time: string;
+
     type: string;
+
   }) => void;
+
   selectedClient: string;
-  setSelectedClient: (client: string) => void;
+
+  setSelectedClient: React.Dispatch<React.SetStateAction<string>>;
+
   openClientModal: () => void;
+
+  selectedDateTime: { date: string; time: string } | null;
+
 }
 
 const AppointmentModal: React.FC<AppointmentModalProps> = ({
@@ -22,10 +45,17 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
   addAppointment,
   selectedClient,
   openClientModal,
+  selectedDateTime,
 }) => {
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [type, setType] = useState('');
+
+  const times = [
+    '9:00 AM' , '10:00 AM',  '11:00 AM',
+    '12:00 PM', '1:00 PM', '2:00 PM', 
+    '3:00 PM' ,'4:00 PM', '5:00 PM'
+  ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,26 +64,58 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
       return;
     }
 
-    // Convert time to the same format as timeSlots
-    const timeDate = new Date(`2000-01-01T${time}`);
-    const formattedTime = format(timeDate, 'h:mm a').toUpperCase();
+    try {
+      // Parse the time string to a Date object
+      const parsedTime = parse(time, 'hh:mm a', new Date());
+      const formattedTime = format(parsedTime, 'hh:mm a');
 
-    addAppointment({
-      patient: selectedClient,
-      date,
-      time: formattedTime,
-      type,
-    });
+      addAppointment({
+        patient: selectedClient,
+        date,
+        time: formattedTime,
+        type,
+      });
+      console.log('Appointment added:', { patient: selectedClient, date, time: formattedTime, type });
+      
 
-    setOpen(false);
-    // Reset form
-    setDate('');
-    setTime('');
-    setType('');
+      // Reset form and close modal
+      setDate('');
+      setTime('');
+      setType('');
+      setOpen(false);
+    } catch (error) {
+      console.error('Error formatting time:', error);
+      alert('Invalid time format');
+    }
   };
 
+  const modalRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        setTime('');
+        setDate('');
+      }
+    };
+
+    if (open) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    if(selectedDateTime)
+    {
+      setDate(selectedDateTime.date);
+      setTime(selectedDateTime.time);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [open, setOpen]);
+
   return (
-    <Dialog open={open} onClose={() => setOpen(false)} className="relative z-20">
+    <Dialog open={open} ref={modalRef} onClose={() => setOpen(false)} className="relative z-20">
       <DialogBackdrop
         transition
         className="fixed inset-0 bg-gray-500/75 transition-opacity"
@@ -100,28 +162,39 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Time</label>
-                  <input
-                    type="time"
+                  <select
                     value={time}
                     onChange={(e) => setTime(e.target.value)}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  />
+                  >
+                    <option value="">Select time</option>
+                    {times.map((time) => (
+                      <option key={time} value={time}>
+                        {time}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Type</label>
-                  <input
-                    type="text"
-                    value={type}
-                    onChange={(e) => setType(e.target.value)}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="e.g., Check-up, Follow-up"
-                  />
+                  <select
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  >
+                  <option value="">Select type</option>
+                  <option value="Check-up">Check-up</option>
+                  <option value="Follow-up">Follow-up</option>
+                  <option value="Consultation">Consultation</option>
+                  <option value="Emergency">Emergency</option>
+                  </select>
                 </div>
 
                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                   <button
                     type="submit"
+                    onClick={handleSubmit}
                     className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:col-start-2"
                   >
                     Add Appointment
@@ -144,3 +217,8 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
 };
 
 export default AppointmentModal;
+import { parse as parseDateFns } from 'date-fns';
+
+function parse(time: string, formatString: string, baseDate: Date): Date {
+  return parseDateFns(time, formatString, baseDate);
+}

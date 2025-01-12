@@ -24,6 +24,7 @@ function App() {
       <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<ProtectedRoute component={Dashboard} isAuthenticated={isAuthenticated} />} />
+        <Route path='/accountant' element={<ProtectedRoute component={AccountantPage} isAuthenticated={isAuthenticated} />} />
         <Route path="appointments" element={<ProtectedRoute component={Appointments} isAuthenticated={isAuthenticated} />} />
         <Route path="patients" element={<ProtectedRoute component={Patients} isAuthenticated={isAuthenticated} />} />
         <Route path="telemedicine" element={<ProtectedRoute component={Telemedicine} isAuthenticated={isAuthenticated} />} />

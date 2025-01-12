@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { DollarSign, FileText, Download, Search, Filter, Plus, ChevronDown } from 'lucide-react';
+import Layout from '../components/Layout';
 
 // Sample data for Moroccan reports
 const bilanData = [
@@ -258,6 +259,7 @@ function AccountantPage() {
   };
 
   return (
+
     <div className="p-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Accountant Dashboard</h1>
