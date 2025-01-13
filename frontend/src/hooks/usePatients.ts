@@ -4,32 +4,34 @@ import PatientDataPage from '../pages/PatientData'; // Adjust the import path as
 
 
 interface PatientData {
-    id: string;
-    prescription: {
-        medication: string;
-        dosage: string;
-        frequency : string;
-        status: string;
-        duration: string;
-    };
-    name: string;
-    age: number;
-    email: string;
-    treatment: string;
-    diseases: string[];
-    phone: string;
-    address: string;
-    lastVisit: string;
-    dob: string;
-    bloodType: string;
-    nextAppointment: string;
-    medications: string[];
-    allergies: string[];
-    recentVisits: {
-        date: string;
-        reason: string;
-        doctor: string;
-    }[];
+  id: string;
+  prescription: {
+      medication: string;
+      dosage: string;
+      frequency: string;
+      startDate: string;
+      endDate: string;
+      status: string;
+      duration: string;
+  }[];
+  name: string;
+  age: number;
+  email: string;
+  treatment: string;
+  diseases: string[];
+  phone: string;
+  address: string;
+  lastVisit: string;
+  dob: string;
+  bloodType: string;
+  nextAppointment: string;
+  medications: string[];
+  allergies: string[];
+  recentVisits: {
+      date: string;
+      reason: string;
+      doctor: string;
+  }[];
 }
 
 
@@ -43,7 +45,17 @@ export const usePatients = () => {
           {
             id: '1',
             name: 'John Doe',
-            prescription: 'None',
+            prescription: [
+              {
+                medication: 'Medication A',
+                dosage: '10mg',
+                frequency: 'Once a day',
+                status: 'Active',
+                duration: '30 days',
+                startDate: '2024-02-15',
+                endDate: '2024-03-15',
+              }
+            ],
             age: 30,
             treatment: 'None',
             email: 'john.doe@example.com',
@@ -70,7 +82,7 @@ export const usePatients = () => {
             treatment: 'None',
             name: 'Jane Smith',
             diseases: ['None'],
-            prescription: 'None',
+            prescription: [],
             age: 25,
             email: 'jane.smith@example.com',
             phone: '(555) 987-6543',
@@ -115,5 +127,5 @@ export const usePatients = () => {
     fetchPatients();
   }, []);*/
 
-  return { patients, /*loading, error*/ };
+  return  patients /*loading, error*/ ;
 };

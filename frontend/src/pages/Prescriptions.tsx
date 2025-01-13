@@ -1,31 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Plus, Search, Filter } from 'lucide-react';
-
-const prescriptions = [
-  {
-    id: 1,
-    patient: 'John Doe',
-    medication: 'Amoxicillin',
-    dosage: '500mg',
-    frequency: 'Every 8 hours',
-    startDate: '2024-03-01',
-    endDate: '2024-03-14',
-    status: 'Active',
-  },
-  {
-    id: 2,
-    patient: 'Jane Smith',
-    medication: 'Lisinopril',
-    dosage: '10mg',
-    frequency: 'Once daily',
-    startDate: '2024-02-15',
-    endDate: '2024-03-15',
-    status: 'Active',
-  },
-  // Add more prescriptions
-];
+import { usePatients } from '../hooks/usePatients';
 
 function Prescriptions() {
+  const  patients  = usePatients();
+  const [searchQuery, setSearchQuery] = useState('');
+/*
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;*/
+
   return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-6">
@@ -43,6 +26,8 @@ function Prescriptions() {
           <input
             type="text"
             placeholder="Search prescriptions..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -81,26 +66,26 @@ function Prescriptions() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {prescriptions.map((prescription) => (
-              <tr key={prescription.id} className="hover:bg-gray-50">
+            {patients?.map((pat) => (
+              <tr key={pat.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="font-medium text-gray-900">{prescription.patient}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-gray-900">{prescription.medication}</div>
+                  <div className="font-medium text-gray-900">{pat.name}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-gray-500">
-                  {prescription.dosage}
+                  {pat.prescription[0]?.medication}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-gray-500">
-                  {prescription.frequency}
+                  {pat.prescription[0]?.dosage}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-gray-500">
-                  {prescription.startDate} - {prescription.endDate}
+                  {pat.prescription[0]?.frequency}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                  {pat.prescription[0]?.duration}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                    {prescription.status}
+                    {pat.prescription[0]?.status}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

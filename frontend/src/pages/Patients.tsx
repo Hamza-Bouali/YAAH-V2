@@ -13,7 +13,7 @@ const LoadingSkeleton = () => (
 );
 
 function Patients() {
-  const { patients, /*loading, error */} = usePatients();
+  const  patients /*loading, error */ = usePatients();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
 

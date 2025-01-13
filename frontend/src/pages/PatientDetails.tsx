@@ -21,7 +21,7 @@ import { usePatients } from '../hooks/usePatients';
 
 function PatientDetails() {
   const { id } = useParams<{ id: string }>();
-  const { patients } = usePatients(); // Move hook to component level
+  const  patients  = usePatients(); // Move hook to component level
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const patientId = id ? parseInt(id, 10) : 0;
@@ -54,7 +54,7 @@ function PatientDetails() {
   useEffect(() => {
     const fetchPatient = () => {
       try {
-        const foundPatient = patients.find(p => p.id.toString() === patientId.toString());
+        const foundPatient = patients?.find(p => p.id.toString() === patientId.toString());
         if (foundPatient) {
           setPatient({
             ...patient,
@@ -359,6 +359,10 @@ function PatientDetails() {
                   </div>
                 ))}
               </div>
+            </div>
+
+            <div className="bg-white rounded-lg shadow p-6">
+            
             </div>
 
             <div className="bg-white rounded-lg shadow p-6">
