@@ -3,7 +3,7 @@ import axios from 'axios';
 import PatientDataPage from '../pages/PatientData'; // Adjust the import path as needed
 
 
-interface PatientData {
+export interface PatientData {
   id: string;
   prescription: {
       medication: string;

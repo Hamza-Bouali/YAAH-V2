@@ -42,12 +42,16 @@ const VideoCall: React.FC<VideoCallProps> = ({ isMicMuted, isVideoOff, onEndCall
 
   const handleEndCall = () => {
     streamRef.current?.getTracks().forEach((track) => track.stop());
+    if (localVideoRef.current) {
+      localVideoRef.current.srcObject = null;
+    }
     onEndCall();
   };
 
   return (
     <div>
       <video ref={localVideoRef} autoPlay muted playsInline className="w-full h-full rounded-xl"></video>
+      <button onClick={handleEndCall} className="mt-4 p-2 bg-red-500 text-white rounded">End Call</button>
     </div>
   );
 };

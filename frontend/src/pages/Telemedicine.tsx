@@ -2,9 +2,11 @@ import React from "react";
 import VideoCall from "../components/VideoCall";
 import { Video, PhoneOff, Mic, MicOff, VideoOff } from "lucide-react";
 import Messages from "./Messages";
+import { PatientData } from "../hooks/usePatients";
+import { usePatients } from "../hooks/usePatients";
 
 interface ClientInfoProps {
-  client: string | null;
+  client: PatientData | null;
 }
 
 const ClientInfo: React.FC<ClientInfoProps> = ({ client }) => {
@@ -13,39 +15,34 @@ const ClientInfo: React.FC<ClientInfoProps> = ({ client }) => {
   }
 
   // Dummy data for demonstration purposes
-  const clientData: { [key: string]: { name: string; age: number; condition: string } } = {
-    client1: {
-      name: "Client 1",
-      age: 30,
-      condition: "Hypertension",
-    },
-    client2: {
-      name: "Client 2",
-      age: 25,
-      condition: "Diabetes",
-    },
-  };
-
-  const info = clientData[client as keyof typeof clientData];
+  const info = client;
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
       <h2 className="text-xl font-bold mb-2">{info.name}</h2>
       <p>Age: {info.age}</p>
-      <p>Condition: {info.condition}</p>
+      <p>Condition: {info.diseases}</p>
     </div>
   );
 };
 
 function Telemedicine() {
   const [isMicMuted, setIsMicMuted] = React.useState(false);
+  const streamRef = React.useRef<MediaStream | null>(null);
+  const localVideoRef = React.useRef<HTMLVideoElement | null>(null);
   const [isVideoOff, setIsVideoOff] = React.useState(false);
   const [isCallActive, setIsCallActive] = React.useState(false);
-  const [selectedClient, setSelectedClient] = React.useState<string | null>(null);
+  const [selectedClient, setSelectedClient] = React.useState<PatientData | null>(null);
+  const  patients  = usePatients();
+
+ 
 
   const handleEndCall = () => {
-    setIsCallActive(false); // Signal to stop the call
+    streamRef.current?.getTracks().forEach((track) => track.stop());
+    if (localVideoRef.current) {
+      localVideoRef.current.srcObject = null;
+    }
+    setIsCallActive(false);
   };
-
   const handleStartSession = () => {
     if (selectedClient) {
       setIsCallActive(true);
@@ -74,12 +71,17 @@ function Telemedicine() {
         <select
           id="client-select"
           className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          value={selectedClient || ""}
-          onChange={(e) => setSelectedClient(e.target.value)}
+          value={selectedClient?.id || ""}
+          onChange={(e) => {
+            const client = patients?.find(client => client.id === e.target.value) || null;
+            setSelectedClient(client);
+          }}
         >
-          <option value="" disabled>Select a client</option>
-          <option value="client1">Client 1</option>
-          <option value="client2">Client 2</option>
+          {patients?.map((client) => (
+            <option key={client.id} value={client.id}>
+              {client.name}
+            </option>
+          ))}
           {/* Add more clients as needed */}
         </select>
       </div>
