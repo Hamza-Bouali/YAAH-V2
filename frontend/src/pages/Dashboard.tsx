@@ -1,5 +1,6 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
+import { usePatients } from '../hooks/usePatients';
 
 function Dashboard() {
   // Sample data for charts
@@ -32,36 +33,7 @@ function Dashboard() {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
   // Sample patient data for diseases, medications, and treatments
-  const patientData = [
-    {
-      id: 1,
-      name: 'John Doe',
-      disease: 'Hypertension',
-      medication: 'Lisinopril',
-      treatment: 'Medication and Lifestyle Changes',
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      disease: 'Diabetes',
-      medication: 'Metformin',
-      treatment: 'Insulin Therapy and Diet',
-    },
-    {
-      id: 3,
-      name: 'Mike Johnson',
-      disease: 'Asthma',
-      medication: 'Albuterol',
-      treatment: 'Inhaler and Steroids',
-    },
-    {
-      id: 4,
-      name: 'Sarah Wilson',
-      disease: 'Arthritis',
-      medication: 'Ibuprofen',
-      treatment: 'Physical Therapy',
-    },
-  ];
+  const patientData = usePatients();
 
   return (
     <div className="p-8">
@@ -213,17 +185,24 @@ function Dashboard() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {patientData.map((patient) => (
+              {patientData?.map((patient) => (
                 <tr key={patient.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="font-medium text-gray-900">{patient.name}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-500">
-                    {patient.disease}
+                    {patient.diseases}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-500">
-                    {patient.medication}
+                    {patient.medications.map((medication, index) => {
+                      return (
+                        <span key={index} className="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm font-semibold text-gray-800 mr-2">
+                          {medication}
+                        </span>
+                      );
+                    })}
                   </td>
+                  
                   <td className="px-6 py-4 whitespace-nowrap text-gray-500">
                     {patient.treatment}
                   </td>
